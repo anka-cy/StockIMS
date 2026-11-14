@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Articles')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: navigation('articles')}"></header>
+<main id="contenu" class="container page">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <h1 class="mb-0">Articles</h1>
+        <a class="btn btn-primary" th:href="@{/articles/nouveau}">Ajouter un article</a>
+    </div>
+    <div th:replace="~{fragments/layout :: succes}"></div>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+        <p class="text-body-secondary small mb-0" data-search-result aria-live="polite" th:text="${#lists.size(articles)} + ' article(s) enregistré(s)'">3 articles enregistrés</p>
+        <div class="search d-flex align-items-center gap-2" data-search-container hidden>
+            <label for="recherche" class="form-label mb-0">Rechercher</label>
+            <input class="form-control form-control-sm" id="recherche" type="search" placeholder="Référence ou désignation" autocomplete="off" data-article-search>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <caption class="visually-hidden">Liste des articles et de leurs stocks</caption>
+            <thead class="table-light">
+                <tr><th scope="col">ID</th><th scope="col">Référence</th><th scope="col">Désignation</th><th scope="col" class="text-end">Stock</th><th scope="col">Action</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="article : ${articles}" data-article-row th:attr="data-search=${article.reference + ' ' + article.designation}">
+                    <td class="text-body-secondary" th:text="${article.id}">1</td>
+                    <td class="reference" th:text="${article.reference}">PAP-001</td>
+                    <td th:text="${article.designation}">Carnet A5</td>
+                    <td class="text-end fw-semibold" th:text="${stocks.getOrDefault(article.id, 0L)}">13</td>
+                    <td><a th:href="@{/stock/{id}(id=${article.id})}" th:attr="aria-label='Voir le stock de ' + ${article.reference}">Voir le stock</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(articles)}"><td colspan="5" class="text-center text-body-secondary py-4">Aucun article enregistré.</td></tr>
+                <tr data-no-results hidden><td colspan="5" class="text-center text-body-secondary py-4">Aucun article ne correspond à votre recherche.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

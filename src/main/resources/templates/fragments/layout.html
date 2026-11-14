@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titre)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titre} + ' — StockIMS'">StockIMS</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/app.js}" defer></script>
+</head>
+<body>
+<header class="site-header" th:fragment="navigation(actif)">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3 py-3">
+        <a class="navbar-brand mb-0 fw-semibold" th:href="@{/articles}">StockIMS <span class="text-body-secondary small ms-2 fw-normal">Gestion de stock</span></a>
+        <nav class="nav nav-underline" aria-label="Navigation principale">
+            <a class="nav-link" th:href="@{/articles}" th:attr="aria-current=${actif == 'articles' ? 'page' : null}">Articles</a>
+            <a class="nav-link" th:href="@{/choix(operation='entree')}" th:attr="aria-current=${actif == 'entree' ? 'page' : null}">Entrées</a>
+            <a class="nav-link" th:href="@{/choix(operation='sortie')}" th:attr="aria-current=${actif == 'sortie' ? 'page' : null}">Sorties</a>
+        </nav>
+    </div>
+</header>
+<div class="alert alert-success" role="status" th:fragment="succes" th:if="${succes}" th:text="${succes}"></div>
+<th:block th:fragment="footer"></th:block>
+</body>
+</html>

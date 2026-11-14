@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ajouter un article')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: navigation('articles')}"></header>
+<main id="contenu" class="container page">
+    <a class="back-link" th:href="@{/articles}">Retour aux articles</a>
+    <h1>Ajouter un article</h1>
+    <p class="small text-body-secondary">Les deux champs sont obligatoires. Le stock initial sera de 0.</p>
+
+    <form class="article-form mt-4" th:action="@{/articles}" th:object="${article}" method="post">
+        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">L’article n’a pas été enregistré. Vérifiez les champs ci-dessous.</div>
+        <div class="mb-3">
+            <label class="form-label" for="reference">Référence</label>
+            <input class="form-control" id="reference" th:field="*{reference}" th:errorclass="is-invalid" maxlength="20" required
+                   placeholder="Ex. : TIS-001" th:attr="aria-invalid=${#fields.hasErrors('reference')}" aria-describedby="reference-aide reference-erreur">
+            <div class="form-text" id="reference-aide">Référence unique, 20 caractères maximum.</div>
+            <p id="reference-erreur" class="invalid-feedback d-block" th:if="${#fields.hasErrors('reference')}" th:errors="*{reference}"></p>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="designation">Désignation</label>
+            <input class="form-control" id="designation" th:field="*{designation}" th:errorclass="is-invalid" maxlength="80" required
+                   placeholder="Ex. : Rouleau de coton" th:attr="aria-invalid=${#fields.hasErrors('designation')}" aria-describedby="designation-aide designation-erreur">
+            <div class="form-text" id="designation-aide">80 caractères maximum.</div>
+            <p id="designation-erreur" class="invalid-feedback d-block" th:if="${#fields.hasErrors('designation')}" th:errors="*{designation}"></p>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-primary" type="submit">Enregistrer</button>
+            <a th:href="@{/articles}">Annuler</a>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

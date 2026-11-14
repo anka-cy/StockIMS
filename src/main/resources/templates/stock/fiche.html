@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Fiche de stock')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: navigation('articles')}"></header>
+<main id="contenu" class="container page">
+    <a class="back-link" th:href="@{/articles}">Retour aux articles</a>
+    <h1 th:text="${article.designation}">Rouleau de coton</h1>
+    <p class="text-body-secondary">Référence : <span th:text="${article.reference}">TIS-001</span></p>
+    <div th:replace="~{fragments/layout :: succes}"></div>
+    <p class="stock-summary">Stock disponible : <strong th:text="${stock}">13</strong> unité(s)</p>
+
+    <section id="enregistrer" class="border-top border-bottom py-4 mb-4" aria-labelledby="mouvement-titre">
+        <h2 id="mouvement-titre">Entrée ou sortie</h2>
+        <p class="small text-body-secondary">La date du jour sera enregistrée automatiquement.</p>
+        <form method="post" th:object="${mouvement}" th:action="@{/stock/{id}/entrees(id=${article.id})}"
+              data-movement-form th:attr="data-reference=${article.reference}">
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                <strong>Le mouvement n’a pas été enregistré.</strong>
+                <p th:each="erreur : ${#fields.globalErrors()}" th:text="${erreur}"></p>
+                <p th:if="${#fields.hasErrors('quantite')}">Vérifiez la quantité ci-dessous.</p>
+            </div>
+            <div class="mb-3 quantity-field">
+                <label class="form-label" for="quantite">Quantité</label>
+                <input class="form-control" id="quantite" type="number" min="1" max="2147483647" step="1" th:field="*{quantite}" required
+                       th:errorclass="is-invalid" th:attr="aria-invalid=${#fields.hasErrors('quantite')}" aria-describedby="quantite-aide quantite-erreur">
+                <div class="form-text" id="quantite-aide">Un entier strictement positif.</div>
+                <p id="quantite-erreur" class="invalid-feedback d-block" th:if="${#fields.hasErrors('quantite')}" th:errors="*{quantite}"></p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-primary" type="submit">Enregistrer une entrée</button>
+                <button class="btn btn-outline-danger" type="submit" data-sortie
+                        th:formaction="@{/stock/{id}/sorties(id=${article.id})}">Enregistrer une sortie</button>
+            </div>
+        </form>
+    </section>
+
+    <section aria-labelledby="historique-titre">
+        <h2 id="historique-titre">Historique des mouvements</h2>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <caption class="visually-hidden">Entrées et sorties de cet article, du plus récent au plus ancien</caption>
+                <thead class="table-light"><tr><th scope="col">Date</th><th scope="col">Mouvement</th><th scope="col" class="text-end">Quantité</th></tr></thead>
+                <tbody>
+                    <tr th:each="ligne : ${mouvements}">
+                        <td th:text="${#temporals.format(ligne.dateMouvement, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${ligne.quantiteSignee() > 0 ? 'Entrée' : 'Sortie'}"></td>
+                        <td class="text-end" th:text="${(ligne.quantiteSignee() > 0 ? '+ ' : '− ') + ligne.quantite}"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(mouvements)}"><td colspan="3" class="text-center text-body-secondary py-4">Aucun mouvement enregistré.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

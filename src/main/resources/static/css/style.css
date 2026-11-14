@@ -1,0 +1,50 @@
+/* Quelques réglages personnels ; Bootstrap fournit les composants et le responsive. */
+:root {
+    --bs-body-font-family: Arial, sans-serif;
+    --bs-body-font-size: .875rem;
+    --bs-link-color: #354f63;
+    --bs-link-hover-color: #182f40;
+}
+
+[hidden] { display: none !important; }
+.container { max-width: 1000px; }
+.site-header { border-bottom: 2px solid #354f63; }
+.navbar-brand { font-size: 20px; }
+.navbar-brand span { font-size: 13px; }
+.nav-link { color: #626b73; font-size: 14px; }
+.nav-link[aria-current="page"] { color: #354f63; font-weight: 600; border-bottom-color: currentColor; }
+.page { margin-block: 30px 48px; }
+h1 { font-size: 24px; margin-bottom: 12px; overflow-wrap: anywhere; }
+h2 { font-size: 17px; margin-bottom: 12px; }
+.back-link { display: inline-block; margin-bottom: 20px; font-size: 13px; }
+.stock-summary { font-size: 17px; margin-bottom: 24px; }
+.stock-summary strong { font-size: 22px; }
+.article-form { max-width: 480px; }
+.quantity-field { max-width: 260px; }
+.quantity-field input { max-width: 150px; }
+.search input { width: 235px; }
+.reference, .table th, .table td:last-child { white-space: nowrap; }
+.table > :not(caption) > * > * { padding: 12px 14px; }
+.table .text-end { font-variant-numeric: tabular-nums; }
+.alert p { margin: 6px 0 0; }
+.btn { font-size: 14px; border-radius: 3px; }
+.btn-primary {
+    --bs-btn-bg: #354f63;
+    --bs-btn-border-color: #354f63;
+    --bs-btn-hover-bg: #263e50;
+    --bs-btn-hover-border-color: #263e50;
+    --bs-btn-active-bg: #263e50;
+    --bs-btn-active-border-color: #263e50;
+}
+.skip-link { position: absolute; top: -100px; left: 16px; background: white; padding: 10px; z-index: 2; }
+.skip-link:focus { top: 10px; }
+
+@media (max-width: 575px) {
+    .container { padding-inline: 16px; }
+    .page { margin-top: 24px; }
+    .search { flex-wrap: wrap; width: 100%; }
+    .search input { flex: 1; min-width: 160px; }
+    .table { min-width: 480px; }
+    .table > :not(caption) > * > * { padding: 10px; }
+    h1 { font-size: 22px; }
+}

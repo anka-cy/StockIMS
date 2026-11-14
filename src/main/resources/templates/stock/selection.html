@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Choisir un article')}"></head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+<header th:replace="~{fragments/layout :: navigation(${operation})}"></header>
+<main id="contenu" class="container page">
+    <h1 th:text="${operation == 'entree' ? 'Enregistrer une entrée' : 'Enregistrer une sortie'}"></h1>
+    <p>Choisissez l’article concerné, puis saisissez la quantité sur sa fiche.</p>
+    <p th:if="${#lists.isEmpty(articles)}">Votre catalogue est vide. <a th:href="@{/articles/nouveau}">Ajouter un article</a></p>
+    <div class="table-responsive" th:unless="${#lists.isEmpty(articles)}">
+        <table class="table table-hover align-middle">
+            <caption class="visually-hidden">Choisir un article pour un mouvement</caption>
+            <thead class="table-light"><tr><th scope="col">Référence</th><th scope="col">Désignation</th><th scope="col" class="text-end">Stock</th><th scope="col">Action</th></tr></thead>
+            <tbody>
+                <tr th:each="article : ${articles}">
+                    <td class="reference" th:text="${article.reference}"></td>
+                    <td th:text="${article.designation}"></td>
+                    <td class="text-end" th:text="${stocks.getOrDefault(article.id, 0L)}"></td>
+                    <td><a th:href="@{/stock/{id}(id=${article.id})} + '#enregistrer'">Choisir cet article</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
